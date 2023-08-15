@@ -48,8 +48,20 @@ uni_op uni_make_op(uni_token token) {
 		};
 	} case UNI_TOKEN_STR:
 		return (uni_op) {UNI_OP_PUSHS, token.pos, token.src, token.src_len};
-	case UNI_TOKEN_WORD:
-		return (uni_op) {UNI_OP_PUSHW, token.pos, token.src, token.src_len};
+	case UNI_TOKEN_WORD: {
+		char intr_str[UNI_INTRINSIC_BUFFER_LEN];
+		strncpy(intr_str, token.src, token.src_len);
+
+		uni_op_type intr_type = UNI_OP_PUSHW;
+
+		for(
+			size_t i = UNI_OP_ADD;	// UNI_OP_ADD is start of intrinsics
+			i < UNI_OP_TYPE_COUNT;	// UNI_OP_TYPE_COUNT is end of intrinsics
+			i++
+		) if(strcmp(uni_intrinsics[i], intr_str) == 0) intr_type = i;
+
+		return (uni_op) {intr_type, token.pos, token.src, token.src_len};
+	}
 	default:
 		return UNI_OP_NULL;
 	}

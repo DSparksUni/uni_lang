@@ -14,6 +14,8 @@
 
 #define UNI_OP_NULL (uni_op) {UNI_OP_TYPE_NULL, UNI_POS_NULL, NULL, 0};
 
+#define UNI_INTRINSIC_BUFFER_LEN 64
+
 typedef enum uni_error_t {
 	UNI_SUCCESS,
 	UNI_FILE_OPEN_ERROR,
@@ -79,6 +81,13 @@ static const char* uni_op_type_string[] = {
     "MULTIPLY",
     "DIVIDE",
     "PRINT"
+};
+
+static const char* uni_intrinsics[] = {
+	"", "", "", "", "",		//  Empty strings so that index into array correlates
+							// with the type of that intrinsic 
+	"+", "-", "*", "/",
+	"print"
 };
 
 typedef struct uni_op_t {

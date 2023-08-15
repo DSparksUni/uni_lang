@@ -62,8 +62,12 @@ int main(size_t argc, char** argv) {
 		uni_file_iter_skip_whitespace(file_iter);
 
 		if (file_iter->c == '\"')
-			tok_src = uni_file_iter_collect_til_quote(file_iter, &tok_size, &tok_pos);
-		else tok_src = uni_file_iter_collect_til_whitespace(file_iter, &tok_size, &tok_pos);
+			tok_src = uni_file_iter_collect_til_quote(
+				file_iter, &tok_size, &tok_pos
+			);
+		else tok_src = uni_file_iter_collect_til_whitespace(
+			file_iter, &tok_size, &tok_pos
+		);
 
 		uni_token token = uni_make_token(tok_src, tok_size, tok_pos);
 
