@@ -3,8 +3,12 @@
 
 #include "uni_io.h"
 #include "uni_file_iter.h"
+#include "uni_token.h"
+#include "uni_op.h"
 
 #pragma GCC diagnostic ignored "-Wformat"
+#pragma GCC diagnostic ignored "-Wformat-extra-args"
+#pragma GCC diagnostic ignored "-Wmain"
 
 int main(size_t argc, char** argv) {
 	char* file_content;
