@@ -14,7 +14,7 @@
 
 #define UNI_OP_NULL (uni_op) {UNI_OP_TYPE_NULL, UNI_POS_NULL, NULL, 0};
 
-#define UNI_INTRINSIC_BUFFER_LEN 64
+#define UNI_INTRINSIC_BUFFER_LEN 16
 
 typedef enum uni_error_t {
 	UNI_SUCCESS,
@@ -24,6 +24,14 @@ typedef enum uni_error_t {
 	UNI_FILE_READ_ERROR,
 	UNI_ERROR_COUNT
 } uni_error;
+
+static const char* uni_error_display_msg[] = {
+	"Success",
+	"Failed to open file",
+	"Failed to get file length",
+	"Allocation failure",
+	"Failed to read file"
+};
 
 typedef struct uni_pos_t {
 	size_t line, col, serial;

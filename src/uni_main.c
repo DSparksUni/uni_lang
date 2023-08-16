@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "uni_io.h"
 #include "uni_file_iter.h"
@@ -9,25 +10,17 @@ int main(size_t argc, char** argv) {
 	char* file_content;
 	size_t file_size, bytes_read;
 
-	uni_error file_read_error = uni_read_file(
+	uni_error file_parse_error = uni_read_file(
 		argv[2], &file_content, &file_size, &bytes_read
 	);
-	if (file_read_error) {
-		printf("[ERROR] File read error: ");
+	if (file_parse_error) {
+		fprintf(stderr, "[ERROR] File parse error: ");
 
-		switch (file_read_error) {
-		case UNI_FILE_OPEN_ERROR:
-			printf("Failed to open file"); break;
-		case UNI_FILE_LENGTH_ERROR:
-			printf("Failed to get file length"); break;
-		case UNI_ALLOC_ERROR:
-			printf("Failed to allocate file buffer"); break;
-		case UNI_FILE_READ_ERROR:
-			printf("Failed to read file"); break;
-		default: printf("Unknown...\n");
-		}
+		if(file_parse_error < UNI_ERROR_COUNT)
+			fprintf(stderr, uni_error_display_msg[file_parse_error]);
+		else fprintf(stderr, "Unknown");
 
-		puts("...");
+		fputs("...", stderr);
 		return -1;
 	}
 	size_t effective_size = (file_size > bytes_read) ? bytes_read : file_size;
