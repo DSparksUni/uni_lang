@@ -42,3 +42,10 @@ fail:
 	*out_bytes_read = 0;
 	return error_flag;
 }
+
+uni_command uni_get_command(const char* cmd_str) {
+	for(size_t i = 1; i < UNI_COMMAND_COUNT; i++)
+		if(strcmp(uni_command_strs[i], cmd_str) == 0) return i;
+
+	return UNI_COMMAND_NULL;
+}

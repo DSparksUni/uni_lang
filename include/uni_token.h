@@ -5,6 +5,8 @@
 
 #include "uni_util.h"
 
+#define UNI_TOKEN_NULL (uni_token){UNI_TOKEN_TYPE_NULL, UNI_POS_NULL, NULL, 0}
+
 #pragma GCC diagnostic ignored "-Wunused-variable"
 
 typedef enum uni_token_type_t {
