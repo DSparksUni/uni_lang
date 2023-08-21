@@ -14,38 +14,34 @@ uni_op uni_make_op(uni_token token) {
 		return (uni_op) {
 			UNI_OP_PUSHI, token.pos, token.src, token.src_len
 		};
-	} case UNI_TOKEN_STR:
+	} break;
+	case UNI_TOKEN_STR:
 		return (uni_op) {UNI_OP_PUSHS, token.pos, token.src, token.src_len};
 	case UNI_TOKEN_WORD: {
-		char intr_str[UNI_INTRINSIC_BUFFER_LEN];
-		if(token.src_len < UNI_INTRINSIC_BUFFER_LEN) {
-			// 	If the full string fits into the buffer, then just copy it in
-			// adding a null terminator as needed
-			strncpy(intr_str, token.src, token.src_len);
-			intr_str[token.src_len] = '\0';
-		} else {
-			//  Otherwise only grab the first 15 characters, adding
-			// a null terminator at the 16th, since no intrinsic is longer
-			// than that
-			strncpy(intr_str, token.src, UNI_INTRINSIC_BUFFER_LEN - 1);
-			intr_str[UNI_INTRINSIC_BUFFER_LEN - 1] = '\0';
-		}
-
 		uni_op_type intr_type = UNI_OP_PUSHW;
 
-		// Check if word is instrinsic to the compiler
-		for(
-			size_t i = UNI_OP_ADD;	// UNI_OP_ADD is start of intrinsics
-			i < UNI_OP_TYPE_COUNT;	// UNI_OP_TYPE_COUNT is end of intrinsics
-			i++
-		) if(strcmp(uni_intrinsics[i], intr_str) == 0) {
-			intr_type = i;
-			break;
+		if(token.src_len < UNI_INTRINSIC_BUFFER_LEN) {
+			// 	If the full string fits into the buffer, then copy it in
+			// adding a null terminator as needed. If it doesn't fit,
+			// no intrinsic check is done since no intrinsic is longer
+			// then the buffer length
+			char intr_str[UNI_INTRINSIC_BUFFER_LEN];
+			strncpy(intr_str, token.src, token.src_len);
+			intr_str[token.src_len] = '\0';
+
+			for(
+				size_t i = UNI_OP_ADD;	// UNI_OP_ADD is start of intrinsics
+				i < UNI_OP_TYPE_COUNT;	// UNI_OP_TYPE_COUNT is end of intrinsics
+				i++
+			) if(strcmp(uni_intrinsics[i], intr_str) == 0) {
+				intr_type = i;
+				break;
+			}
 		}
 
 		return (uni_op) {intr_type, token.pos, token.src, token.src_len};
-	} default:
-		return UNI_OP_NULL;
+	} break;
+	default: return UNI_OP_NULL;
 	}
 }
 

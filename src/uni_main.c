@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "uni_io.h"
-#include "uni_file_iter.h"
-#include "uni_token.h"
-#include "uni_op.h"
 #include "uni_commands.h"
 
 #pragma GCC diagnostic ignored "-Wformat"

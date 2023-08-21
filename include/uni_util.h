@@ -21,6 +21,7 @@ typedef enum uni_error_t {
 	UNI_FILE_LENGTH_ERROR,
 	UNI_ALLOC_ERROR,
 	UNI_FILE_READ_ERROR,
+	UNI_INVALID_WRITE_HANDLE_ERROR,
 	UNI_ERROR_COUNT
 } uni_error;
 
@@ -29,7 +30,8 @@ static const char* uni_error_display_msg[] = {
 	"Failed to open file",
 	"Failed to get file length",
 	"Allocation failure",
-	"Failed to read file"
+	"Failed to read file",
+	"Invalid file write handle"
 };
 
 typedef struct uni_pos_t {

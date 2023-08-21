@@ -25,11 +25,12 @@ uni_error uni_read_file(
 	size_t bytes_read = fread(file_buffer, 1, file_size, fptr);
 	if (bytes_read == 0 && file_size != 0) {
 		error_flag = UNI_FILE_READ_ERROR;
-		free(file_buffer);
 		goto fail;
 	}
 	if (bytes_read < file_size) file_buffer[bytes_read] = '\0';
 	else file_buffer[file_size] = '\0';
+
+	fclose(fptr);
 
 	*out_file_size = file_size;
 	*out_file_buffer = file_buffer;
@@ -37,15 +38,42 @@ uni_error uni_read_file(
 	return UNI_SUCCESS;
 
 fail:
+	if(fptr) fclose(fptr);
+	if(file_buffer) free(file_buffer);
+
 	*out_file_buffer = "";
 	*out_file_size = 0;
 	*out_bytes_read = 0;
 	return error_flag;
 }
 
-uni_command uni_get_command(const char* cmd_str) {
-	for(size_t i = 1; i < UNI_COMMAND_COUNT; i++)
-		if(strcmp(uni_command_strs[i], cmd_str) == 0) return i;
+uni_error uni_write_asm_header(FILE* fptr) {
+	if(!fptr) return UNI_INVALID_WRITE_HANDLE_ERROR;
 
-	return UNI_COMMAND_NULL;
+	// Boiler plate
+	fputs("\t.386", fptr);
+	fputs("\t.model flat, stdcall", fptr);
+	fputs("\toption casemap:none", fptr);
+	fputs("", fptr);
+
+	// Includes
+	fputs("\tinclude \\masm32\\include\\windows.inc", fptr);
+	fputs("\tinclude \\masm32\\include\\kernel32.inc", fptr);
+	fputs("\tinclude \\masm32\\include\\user32.inc", fptr);
+
+	// Libs
+	fputs("\tinclude \\masm32\\include\\kernel32.lib", fptr);
+	fputs("\tinclude \\masm32\\include\\user32.lib", fptr);
+	fputs("", fptr);
+
+	return UNI_SUCCESS;
+}
+
+void uni_get_write_from_input_path(char* input_path) {
+	char* ext = strrchr(input_path, '.');
+	if(!ext) return;
+
+	*(ext + 1) = 'a';
+	*(ext + 2) = 's';
+	*(ext + 3) = 'm';
 }
