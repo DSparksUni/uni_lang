@@ -1,13 +1,13 @@
 from collections import namedtuple
 from enum import Enum, auto
-from typing import Iterator
+from typing import Generator
 
 from .file import FileIterator
 from .types import *
 from .emitter import emit_ops
 from .util.error import eprint
 
-def get_ops(input_file: str, args: list[str]) -> Iterator[Op]:
+def get_ops(input_file: str, args: list[str]) -> Generator[Op, None, None]:
     def get_token(file_iter: FileIterator) -> Token:
         token_raw: tuple[str, int]
         if file_iter.c == "\"":

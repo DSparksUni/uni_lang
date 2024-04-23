@@ -1,4 +1,4 @@
-from typing import Iterator
+from typing import Generator
 from dataclasses import dataclass
 
 from .types import Op, OpType, Intrinsics, StackTypes, TYPE_STRS, assert_type, assert_types
@@ -46,7 +46,7 @@ class Emitter:
         return self.head + self.main + "\n" + self.data + "\n" + self.bss
 
 
-def emit_ops(out_name: str, ops: Iterator[Op]) -> None:
+def emit_ops(out_name: str, ops: Generator[Op, None, None]) -> None:
     emit = Emitter()
 
     string_literals: dict[str, str] = {}
@@ -204,7 +204,6 @@ def emit_ops(out_name: str, ops: Iterator[Op]) -> None:
                 emit.emit_main("\tsub rsp, 40")
                 emit.emit_main("\tcall puts")
                 emit.emit_main("\tadd rsp, 40")
-    
 
     out_file_content = emit.collect()
     with open(out_name, "w") as out_file:
