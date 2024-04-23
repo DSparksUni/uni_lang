@@ -63,9 +63,6 @@ def get_ops(input_file: str, args: list[str]) -> Iterator[Op]:
         op = parse_ast_piece(token)
 
         file_iter.advance()
-        print_token(token)
-        print_op(op)
-        print()
 
         yield op
 
